@@ -1,0 +1,30 @@
+1. 首先请确保安装了开发用的libtool，如果没有安装请输入以下指令安装
+sudo apt-get install libtool
+
+2. 下载CURL源码，并安装，下载链接如下所示：
+http://curl.haxx.se/download/curl-7.41.0.tar.gz
+或者使用git获取代码.
+git clone git://github.com/bagder/curl.git
+使用如下命令安装
+./configure --prefix=/usr/local/curl
+make
+make install
+可选：curl加入命令行变量 export PATH=$PATH:/usr/local/curl/bin
+
+3. 下载JSONC源码，并安装，下载链接如下所示：
+JSONC有两个路径，一个SVN (http://svn.metaparadigm.com/svn/json-c/trunk)
+一个GIT (https://github.com/jehiah/json-c)
+下载后，使用如下命令完成编译安装。
+sh autogen.sh
+./configure --prefix=/usr/local/json
+make
+make install
+make check 
+如果系统中已经存在pkgconfig的情况，可以在makefile中添加如下命令就可以了
+CFLAGS += $(shell pkg-config --cflags json)
+LDFLAGS += $(shell pkg-config --libs json)
+
+4. 确保以上安装完成之后，编译代码请使用如下命令 make 
+5. 删除编译过程中产生的文件，请使用make clean
+
+
