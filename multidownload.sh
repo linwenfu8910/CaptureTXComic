@@ -11,7 +11,7 @@
 @ StartNum = 521585
 @ EndNum = 530000
 while($StartNum <= $EndNum)
-./CaptureTXComic $StartNum
+./CaptureTXComic -i:$StartNum
 @ StartNum++
 echo $StartNum
 end

@@ -1202,7 +1202,7 @@ int main(int argc, char *argv[])
     curl = curl_easy_init();
     if (curl) 
     {
-        //si_ctxcPrintWelcomeInfo();
+        si_ctxcPrintWelcomeInfo();
         si_ctxcExitSignalProcess();
         si_ctxcExecOption(argc, argv);
     }
