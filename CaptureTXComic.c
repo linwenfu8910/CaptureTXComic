@@ -67,8 +67,8 @@ typedef unsigned int UINT32;
 #define NAME_STRING_ON  "ON"
 #define NAME_STRING_OFF "OFF"
 
-static BYTE sm_cCurlLogOption = CURL_PARAM_VERBOSE;
-static BYTE sm_cChapterFolderOption = 0;
+static INT32 sm_nCurlLogOption = CURL_PARAM_VERBOSE;
+static INT32 sm_nChapterFolderOption = 0;
 static INT32 sm_nComicPictureId = 0;
 static CHAR sm_cTitleName[128];
 static CHAR sm_cIPProxy[32]="NONE";
@@ -142,7 +142,7 @@ static void si_ctxcDownloadComicFile(const CHAR *pcUrl, const CHAR *pcFileName)
     //curl_easy_setopt(curl, CURLOPT_PROXY, URL_IP_PROXY);
 #endif //#if defined(__USE_IP_PROXY__)
     curl_easy_setopt(curl, CURLOPT_URL, pcUrl);
-    curl_easy_setopt(curl, CURLOPT_VERBOSE, sm_cCurlLogOption);
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, sm_nCurlLogOption);
     curl_easy_setopt(curl, CURLOPT_COOKIEFILE, "");    
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, Si_ctxcWriteDataFile);
     
@@ -207,7 +207,7 @@ static void si_ctxcGetPictureHash(INT32 nID, INT32 nCID)
 
     si_ctxcGeneratePictureHashUrl(cBuffer, sizeof(cBuffer), nID, nCID);
     curl_easy_setopt(curl, CURLOPT_URL, cBuffer);
-    curl_easy_setopt(curl, CURLOPT_VERBOSE, sm_cCurlLogOption);
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, sm_nCurlLogOption);
     curl_easy_setopt(curl, CURLOPT_COOKIEFILE, ""); 
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, Si_ctxcWriteDataFile);
 
@@ -371,13 +371,13 @@ static void si_ctxcCreateComicDownloadList(INT32 nID, INT32 nCID, CHAR *pcDirPat
     INT32 nFileExit = 0;
     pcDirPath[nLength]= '/';
     strcpy(&pcDirPath[nLength+1], NAME_DOWNLOAD_LIST);
-    if(access(pcDirPath, F_OK) == 0 && sm_cChapterFolderOption != 0)
+    if(access(pcDirPath, F_OK) == 0 && sm_nChapterFolderOption != 0)
     {
         nFileExit = 1;
     }
     else
     {
-        if(sm_cChapterFolderOption)
+        if(sm_nChapterFolderOption)
         {
             psFile = fopen(pcDirPath, "wb");
         }
@@ -468,7 +468,7 @@ static void si_ctxcCreateComicChapterData(INT32 nID, CHAR *pcDirPath, INT32 nLen
     INT32 nSeq = 0;
     INT32 nCID = 0;
 
-    if(sm_cChapterFolderOption == 0)
+    if(sm_nChapterFolderOption == 0)
     {
         // Delete old download list
         BYTE cTempPath[URL_CACHE_SIZE];
@@ -505,7 +505,7 @@ static void si_ctxcCreateComicChapterData(INT32 nID, CHAR *pcDirPath, INT32 nLen
                 {
                     nIndex++;
 
-                    if(sm_cChapterFolderOption)
+                    if(sm_nChapterFolderOption)
                     {
                         // Create chapter folder by use chapter name
                         snprintf(&pcDirPath[nLength], URL_CACHE_SIZE, "/%s", json_object_get_string(psChapterObj));
@@ -518,7 +518,7 @@ static void si_ctxcCreateComicChapterData(INT32 nID, CHAR *pcDirPath, INT32 nLen
                         // Create Chapter file 
                         FILE * psFile;
                         CHAR cTemp[URL_CACHE_SIZE];
-                        snprintf(cTemp, sizeof(cTemp), "%s/%08dChapter:%s CID:%d", pcDirPath, sm_nComicPictureId, json_object_get_string(psChapterObj), nCID);
+                        snprintf(cTemp, sizeof(cTemp), "%s/%08dChapter %s CID %d", pcDirPath, sm_nComicPictureId, json_object_get_string(psChapterObj), nCID);
                         // Check illiegle chapter charactor
                         si_ctxcCheckIllegleChar(cTemp);
                         psFile = fopen(cTemp, "wb+");
@@ -1098,8 +1098,8 @@ static void si_ctxcExecOption(int argc, char *const *argv)
         }
         else if(NULL != strstr(p, "-c"))
         {
-            sscanf(p, "-c:%d", &sm_cChapterFolderOption);
-            DEB_CAPTURETXCOMIC_PRINT("Use the Chapter Folder %s\n", (sm_cChapterFolderOption == 0) ? NAME_STRING_OFF : NAME_STRING_ON );
+            sscanf(p, "-c:%d", &sm_nChapterFolderOption);
+            DEB_CAPTURETXCOMIC_PRINT("Use the Chapter Folder %s\n", (sm_nChapterFolderOption == 0) ? NAME_STRING_OFF : NAME_STRING_ON );
         }
         else if(NULL != strstr(p, "-j"))
         {
@@ -1123,8 +1123,8 @@ static void si_ctxcExecOption(int argc, char *const *argv)
         }
         else if(NULL != strstr(p, "-Log"))
         {
-            sscanf(p, "-Log:%d", &sm_cCurlLogOption);
-            DEB_CAPTURETXCOMIC_PRINT("Use CURL Log display %s\n", (sm_cCurlLogOption == 0) ? NAME_STRING_OFF : NAME_STRING_ON);
+            sscanf(p, "-Log:%d", &sm_nCurlLogOption);
+            DEB_CAPTURETXCOMIC_PRINT("Use CURL Log display %s\n", (sm_nCurlLogOption == 0) ? NAME_STRING_OFF : NAME_STRING_ON);
         }
         else if(NULL != strstr(p, "-update"))
         {
