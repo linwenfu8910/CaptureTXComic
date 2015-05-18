@@ -1,6 +1,6 @@
 CC = gcc
-LIB = -L/usr/local/json/lib
-INCLUDE = -I/usr/local/json/include/json
+LIB = -L/usr/local/json/lib -L/usr/local/curl/lib
+INCLUDE = -I/usr/local/json/include/json -I/usr/local/curl/include
 CURLFLAGS = -lcurl 
 JSONFLAGS = -ljson
 PTHREADFLAGS = -lpthread
@@ -11,7 +11,7 @@ OBJS = $(patsubst %.c, %.o, $(FILES))
 RM = rm -f
 TARGET = CaptureTXComic
 $(TARGET) : $(OBJS)
-	$(CC) -o $(TARGET) $(OBJS) $(CURLFLAGS) $(JSONFLAGS) $(PTHREADFLAGS)
+	$(CC) $(CFLAGS) $(OBJS) $(CURLFLAGS) $(JSONFLAGS) $(PTHREADFLAGS) -o $(TARGET)
 clean:
 	-$(RM) $(TARGET)
 	-$(RM) $(OBJS)
